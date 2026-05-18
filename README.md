@@ -102,15 +102,21 @@ Entry point. Creates an `Experiment` object and triggers all tests.
 ## F. Reflection
 **How does graph size affect BFS and DFS performance?**
 -Performance time increasing linearly due to the O(V+E) time complexity
+
 **Which traversal is faster in your experiments?**
 -DFS shows faster execution in the medium and small graphs. In the context of the large graph, the BFS has managed to perform faster execution
+
 **Do results match the expected complexity O(V + E)?**
 -Yes, The measured times grow proportionally with graph size, not exponentially, which confirms linear O(V + E) complexity
+
 **How does graph structure affect traversal order?**
 -On the 10-vertex ring graph, BFS produced [0, 1, 2, 8, 9, 3, 4, 6, 7, 5] — spreading outward by distance from V0. DFS produced [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] — following the ring chain in order. A different graph would produce completely different orders for the same algorithms
+
 **When is BFS preferred over DFS?**
 -When you need level by level processing or when you need to fing shortest path between 2 vertices
+
 **What are the limitations of DFS?**
 -Recursive DFS can cause a stack overflow on very deep or large graphs. Also it cannot find minimum-cost paths in weighted graphs on its own
+
 
 This work helped helped me to learn Graph structure and `Depth-First Serch(DFS)` and `Breadth-first search(BFS)` algorithms. The main difference between DFS and BFS that DFS is use `as deep as possible` principle, while BFS follows `level-by-level`. The main challenge about this project was implementind new data structure adjacencyList, because it was new to me and caused some problem during coding phase 
