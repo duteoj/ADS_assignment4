@@ -2,20 +2,9 @@
 
 ## A. Project Overview
 
-This project implements a graph data structure in Java and demonstrates two classic traversal algorithms — **Breadth-First Search (BFS)** and **Depth-First Search (DFS)** — on graphs of different sizes.
+To completed assignment I used a graph structure. Grapth is a data structure consisting of vertices and edges. Vertices individual elements, while edges relathionship between vertices.
 
-### What is a Graph?
-A **graph** is a data structure consisting of:
-- **Vertices (nodes)** — individual elements (e.g., cities, people, web pages)
-- **Edges (connections)** — relationships between vertices (e.g., roads, friendships, links)
-
-Graphs can be **directed** (edges have a direction) or **undirected** (edges go both ways). This project uses an **undirected** graph.
-
-### BFS Overview
-Breadth-First Search explores a graph **level by level**. Starting from a source vertex, it visits all immediate neighbors first, then their neighbors, and so on. It uses a **queue** (FIFO).
-
-### DFS Overview
-Depth-First Search explores a graph by going **as deep as possible** along each branch before backtracking. It uses a **stack** (LIFO) — either explicitly or via recursion.
+Breadth-First Search explores a graph level by level. Starting from a source vertex, it visits all immediate neighbors first, then their neighbors, and so on. Depth-First Search explores a graph by going as deep as possible along each branch before backtracking.
 
 ---
 
