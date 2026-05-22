@@ -125,4 +125,144 @@ Entry point. Creates an `Experiment` object and triggers all tests.
 -Recursive DFS can cause a stack overflow on very deep or large graphs. Also it cannot find minimum-cost paths in weighted graphs on its own
 
 
-This work helped helped me to learn Graph structure and `Depth-First Serch(DFS)` and `Breadth-first search(BFS)` algorithms. The main difference between DFS and BFS that DFS is use `as deep as possible` principle, while BFS follows `level-by-level`. The main challenge about this project was implementind new data structure adjacencyList, because it was new to me and caused some problem during coding phase 
+This work helped helped me to learn Graph structure and `Depth-First Serch(DFS)` and `Breadth-first search(BFS)` algorithms. The main difference between DFS and BFS that DFS is use `as deep as possible` principle, while BFS follows `level-by-level`. The main challenge about this project was implementind new data structure adjacencyList, because it was new to me and caused some problem during coding phase
+
+
+# Bonus Task: Dijkstra's Shortest Path Algorithm
+
+---
+
+## Overview
+
+Dijkstra's algorithm finds the **shortest path from one starting vertex to all other vertices** in a weighted graph. "Shortest" means the path with the smallest total edge weight.
+
+**Real-world examples:**
+- GPS navigation (shortest driving route)
+- Network routing (lowest latency path)
+- Game pathfinding (cheapest movement cost)
+
+---
+
+## Changes to Existing Code
+
+### `Edge.java` — added `weight` field
+
+The `Edge` class was extended with an integer `weight` field and a new constructor:
+
+```java
+public Edge(Vertex source, Vertex destination, int weight) {
+    this.source = source;
+    this.destination = destination;
+    this.weight = weight;
+}
+```
+
+The original no-weight constructor still exists (defaults to weight = 1) so the rest of the project continues to work unchanged.
+
+### `WeightedGraph.java` — new class
+
+A new class was created instead of modifying `Graph.java`, to keep the original BFS/DFS code clean.
+
+The adjacency list stores `int[]` pairs instead of plain integers:
+
+```java
+Map<Integer, List<int[]>> adjacencyList;
+// each int[] = { neighborId, weight }
+```
+
+Example: `V0 -> [[1, 2], [3, 6]]` means V0 connects to V1 (weight 2) and V3 (weight 6).
+
+---
+
+## Algorithm: Step-by-Step
+
+Given this graph:
+
+```
+      2       3
+ V0 ----- V1 ----- V2
+ |          |         |
+6|         8|        7|
+ |          |         |
+ V3 ----- V4 ----- V5
+      1       5
+```
+
+**Step 1 — Initialize:**
+- dist[V0] = 0 (start here)
+- dist[all others] = ∞
+- visited = none
+
+**Step 2 — Pick unvisited vertex with smallest distance → V0 (dist=0):**
+- Relax neighbors: dist[V1] = 0+2 = 2, dist[V3] = 0+6 = 6
+- Mark V0 visited
+
+**Step 3 — Pick next → V1 (dist=2):**
+- Relax neighbors: dist[V2] = 2+3 = 5, dist[V4] = 2+8 = 10
+- dist[V3] stays 6 (2+8 > 6)
+- Mark V1 visited
+
+**Step 4 — Pick next → V2 (dist=5):**
+- dist[V5] = 5+7 = 12
+- Mark V2 visited
+
+**Step 5 — Pick next → V3 (dist=6):**
+- dist[V4] = min(10, 6+1) = **7** ← updated!
+- Mark V3 visited
+
+**Step 6 — Pick next → V4 (dist=7):**
+- dist[V5] = min(12, 7+5) = 12 (no change)
+- Mark V4 visited
+
+**Step 7 — Pick next → V5 (dist=12):**
+- No unvisited neighbors
+- Mark V5 visited — done!
+
+---
+
+## Output
+
+```
+Weighted Graph (Adjacency List):
+  V0 -> [V1(w=2), V3(w=6)]
+  V1 -> [V0(w=2), V2(w=3), V4(w=8)]
+  V2 -> [V1(w=3), V5(w=7)]
+  V3 -> [V0(w=6), V4(w=1)]
+  V4 -> [V1(w=8), V3(w=1), V5(w=5)]
+  V5 -> [V2(w=7), V4(w=5)]
+
+Dijkstra's Shortest Paths from V0:
+  Vertex     Distance     Path
+  ----------------------------------------
+  V0         0            V0
+  V1         2            V0 -> V1
+  V2         5            V0 -> V1 -> V2
+  V3         6            V0 -> V3
+  V4         7            V0 -> V3 -> V4
+  V5         12           V0 -> V1 -> V2 -> V5
+```
+
+Note that V4 is reached via V3 (distance 7 = 6+1), **not** via V1 (distance 10 = 2+8). This shows Dijkstra correctly choosing the cheaper path even when it goes through more vertices.
+
+---
+
+## Time Complexity
+
+This implementation uses **simple arrays and loops** (no priority queue), as allowed by the task requirements.
+
+| Step | Cost |
+|------|------|
+| Finding minimum distance vertex | O(V) per iteration |
+| Total iterations | V |
+| Relaxing edges | O(E) total |
+| **Overall** | **O(V² + E) = O(V²)** |
+
+A priority-queue version would run in O((V + E) log V), which is faster for sparse graphs but more complex to implement.
+
+---
+
+## Why Dijkstra Does Not Work with Negative Weights
+
+Dijkstra assumes that once a vertex is marked visited, its distance is final. With negative weights, a later path could give a shorter distance to an already-visited vertex — breaking this assumption. For graphs with negative weights, **Bellman-Ford algorithm** should be used instead.
+
+---
